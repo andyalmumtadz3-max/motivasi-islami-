@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Motivasi Islami</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: black;
+            color: white;
+            font-family: Arial;
+            text-align: center;
+        }
+        /* FORM */
+        
+        #form {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        input {
+            padding: 10px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        /* SLIDE */
+        
+        #slide {
+            display: none;
+            height: 100vh;
+            cursor: pointer;
+        }
+        
+        .nama {
+            margin-top: 80px;
+        }
+        
+        .arab {
+            margin-top: 100px;
+            font-size: 24px;
+            color: gold;
+        }
+        
+        .arti {
+            margin-top: 20px;
+            color: #ccc;
+        }
+        
+        #endButton {
+            margin-top: 30px;
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 20px;
+            background: gold;
+            color: black;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+        
+        #endButton:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- AUDIO -->
+    <audio id="bgm">
+    <source src="c:\Users\USER\Desktop\web-islami\musik.mp3" type="audio/mpeg">
+</audio>
+
+    <!-- FORM -->
+    <div id="form">
+        <h2>Masukkan Nama</h2>
+        <input type="text" id="nama">
+        <br>
+        <button onclick="mulai()">Mulai</button>
+    </div>
+
+    <!-- SLIDE -->
+    <div id="slide" onclick="nextSlide()">
+        <div class="nama" id="namaUser"></div>
+        <div class="arab" id="arab"></div>
+        <div class="arti" id="arti"></div>
+
+        <button id="endButton" onclick="ulang()" style="display:none;">
+        Yang kuat ya 💛
+    </button>
+    </div>
+
+    <!-- SCRIPT KAMU (TIDAK DIUBAH) -->
+    <script>
+        const data = [{
+            arab: "لَا تُقَسِّ عَلَى نَفْسِكَ كَثِيرًا، فَأَنْتَ تُحَاوِلُ وَاللَّهُ يَرَى جُهْدَكَ",
+            arti: "Jangan terlalu keras pada dirimu sendiri, kamu sedang berusaha dan Allah melihat setiap usahamu."
+        }, {
+            arab: "تَذَكَّرْ أَنَّكَ لَسْتَ مُطَالَبًا بِالْكَمَالِ، بَلْ بِالِاسْتِمْرَارِ",
+            arti: "Ingatlah, kamu tidak dituntut untuk sempurna, tetapi untuk terus melanjutkan."
+        }, {
+            arab: "إِذَا تَعِبْتَ فَلَا تَكْتُمْ تَعَبَكَ، فَاللَّهُ يَعْلَمُ مَا فِي قَلْبِكَ",
+            arti: "Jika kamu lelah, jangan dipendam. Allah mengetahui apa yang ada di dalam hatimu."
+        }, {
+            arab: "لَا تُحَمِّلْ نَفْسَكَ مَا لَا تُطِيقُ، فَإِنَّ اللَّهَ أَرْحَمُ بِكَ مِنْ نَفْسِكَ",
+            arti: "Jangan memikul beban yang tidak sanggup kamu tanggung, karena Allah lebih sayang kepadamu daripada dirimu sendiri."
+        }, {
+            arab: "كُلُّ خُطْوَةٍ صَعْبَةٍ تَقْطَعُهَا الْيَوْمَ سَتَكُونُ قُوَّةً لَكَ غَدًا",
+            arti: "Setiap langkah sulit yang kamu lewati hari ini akan menjadi kekuatan untukmu di masa depan."
+        }, {
+            arab: "لَا تُقَارِنْ نَفْسَكَ بِأَحَدٍ، فَكُلُّ شَخْصٍ لَهُ مَعْرَكَتُهُ الْخَاصَّةُ",
+            arti: "Jangan membandingkan dirimu dengan orang lain, setiap orang punya perjuangannya sendiri."
+        }, {
+            arab: "إِذَا سَقَطْتَ فَقُمْ، فَالسُّقُوطُ لَيْسَ نِهَايَةً بَلْ بَدَايَةُ قُوَّةٍ جَدِيدَةٍ",
+            arti: "Jika kamu jatuh, bangkitlah. Jatuh bukan akhir, tapi awal dari kekuatan baru."
+        }, {
+            arab: "لَا تُجْبِرْ نَفْسَكَ عَلَى مَا يُؤْذِيهَا، فَالرَّاحَةُ حَقٌّ لَكَ أَيْضًا",
+            arti: "Jangan memaksa dirimu pada hal yang menyakitimu, karena istirahat juga adalah hakmu."
+        }, {
+            arab: "أَنْتَ لَسْتَ فَاشِلًا، أَنْتَ فِي طَرِيقِ التَّعَلُّمِ",
+            arti: "Kamu bukan gagal, kamu sedang dalam proses belajar."
+        }, {
+            arab: "كُنْ صَبُورًا مَعَ نَفْسِكَ، فَالنُّضْجُ يَأْتِي بِالتَّدْرِيجِ",
+            arti: "Bersabarlah dengan dirimu sendiri, karena kedewasaan datang secara perlahan."
+        }, {
+            arab: "لَا تَحْزَنْ إِذَا لَمْ تَسِرِ الْأُمُورُ كَمَا تُرِيدُ، فَلَعَلَّهَا تَسِيرُ كَمَا يَخْتَارُ اللَّهُ لَكَ",
+            arti: "Jangan sedih jika segala sesuatu tidak berjalan sesuai keinginanmu, mungkin Allah memilihkan yang lebih baik."
+        }, {
+            arab: "أَنْتَ تَتَحَسَّنُ حَتْمًا، وَلَوْ لَمْ تَشْعُرْ بِذَلِكَ الآن",
+            arti: "Kamu pasti sedang membaik, meskipun kamu belum merasakannya sekarang."
+        }, {
+            arab: "كُلُّ تَأْخِيرٍ فِي حَيَاتِكَ لَهُ حِكْمَةٌ لَا تُدْرِكُهَا حَالِيًّا",
+            arti: "Setiap penundaan dalam hidupmu memiliki hikmah yang belum kamu pahami sekarang."
+        }, {
+            arab: "لَا تَكْسِرْ نَفْسَكَ بِالتَّفْكِيرِ الزَّائِدِ، فَاللَّهُ مُدَبِّرُ أُمُورِكَ",
+            arti: "Jangan menghancurkan dirimu dengan pikiran berlebihan, karena Allah yang mengatur urusanmu."
+        }, {
+            arab: "أَنْتَ تُنْجِزُ أَكْثَرَ مِمَّا تَشْعُرُ بِهِ",
+            arti: "Kamu sebenarnya sudah melakukan lebih banyak dari yang kamu sadari."
+        }, {
+            arab: "كُلُّ يَوْمٍ تَصْمُدُ فِيهِ هُوَ نَصْرٌ جَدِيدٌ لَكَ",
+            arti: "Setiap hari kamu bertahan adalah kemenangan baru untukmu."
+        }, {
+            arab: "لَا تُلْقِ اللَّوْمَ عَلَى نَفْسِكَ دَائِمًا، فَأَنْتَ تُحَاوِلُ بِقُوَّتِكَ",
+            arti: "Jangan selalu menyalahkan dirimu sendiri, kamu sedang berusaha dengan kemampuanmu."
+        }, {
+            arab: "قَلْبُكَ يَتَعَلَّمُ، وَيُشْفَى، وَيَقْوَى بَعْدَ كُلِّ أَلَمٍ",
+            arti: "Hatimu sedang belajar, sembuh, dan menjadi kuat setelah setiap luka."
+        }, {
+            arab: "سَتَفْهَمُ يَوْمًا أَنَّ كُلَّ مَا مَرَرْتَ بِهِ كَانَ لِخَيْرِكَ",
+            arti: "Suatu hari kamu akan mengerti bahwa semua yang kamu lalui adalah untuk kebaikanmu."
+        }];
+        let index = 0;
+        let typing = false;
+        let namaUser = "";
+
+        // MULAI
+        function mulai() {
+            let nama = document.getElementById("nama").value;
+
+            if (nama === "") {
+                alert("Masukkan nama dulu!");
+                return;
+            }
+
+            namaUser = nama;
+
+            document.getElementById("form").style.display = "none";
+            document.getElementById("slide").style.display = "block";
+
+            document.getElementById("namaUser").innerText = "Untuk " + nama;
+
+            // ▶️ mulai musik
+            let bgm = document.getElementById("bgm");
+            bgm.play();
+
+            tampil();
+        }
+
+        // EFEK KETIK
+        function ketik(teks, el, i = 0, callback) {
+            typing = true;
+
+            if (i < teks.length) {
+                el.innerHTML += teks.charAt(i);
+                setTimeout(() => ketik(teks, el, i + 1, callback), 40);
+            } else {
+                typing = false;
+                if (callback) callback();
+            }
+        }
+
+        // TAMPIL SLIDE
+        function tampil() {
+            let arab = document.getElementById("arab");
+            let arti = document.getElementById("arti");
+
+            arab.innerHTML = "";
+            arti.innerHTML = "";
+
+            ketik(data[index].arab, arab, 0, () => {
+                setTimeout(() => {
+                    arti.innerText = data[index].arti;
+                }, 500);
+            });
+        }
+
+        // ENDING
+        function tampilEnding() {
+            let arab = document.getElementById("arab");
+            let arti = document.getElementById("arti");
+
+            arab.innerHTML = "";
+            arti.innerHTML = "";
+
+            let pesan = `
+يا ${namaUser}... لَا تَنْسَ كُلَّ مَرَّةٍ سَقَطْتَ فِيهَا وَشَعَرْتَ أَنَّكَ لَا تَسْتَطِيعُ الْقِيَامَ، ثُمَّ اخْتَرْتَ أَنْ تَقُومَ مِنْ جَدِيدٍ وَلَوْ بِبُطْءٍ، وَلَا تَنْسَ كُلَّ مَا حَمَلْتَهُ وَحْدَكَ مِنْ أَثْقَالٍ، وَكَيْفَ صَمَدْتَ حَتَّى هَذِهِ اللَّحْظَةِ. قَدْ لَا تَكُونُ بِخَيْرٍ الْيَوْمَ، وَقَدْ تَشْعُرُ بِالتَّعَبِ الشَّدِيدِ وَلَا تَعْرِفُ مَاذَا تَفْعَلُ، وَقَدْ تَشْعُرُ أَنَّ أَحَدًا لَا يَفْهَمُ مَا تَمُرُّ بِهِ. وَلَكِنِ اذْكُرْ أَنَّ اللَّهَ لَمْ يَتْرُكْكَ أَبَدًا، حَتَّى فِي اللَّحَظَاتِ الَّتِي تَظُنُّ فِيهَا أَنَّكَ بَعِيدٌ عَنْهُ. أَنْتَ فِي طَرِيقِ التَّشْكِيلِ وَالتَّقْوِيَةِ لِتُصْبِحَ أَقْوَى مِمَّا كُنْتَ عَلَيْهِ، فَلَا تَتَوَقَّفْ الْآنَ وَلَوْ كَانَ خُطُوُكَ بَطِيئًا. اِسِيرْ بِهُدُوءٍ، فَفِي دَاخِلِكَ نُورٌ يَحْفَظُهُ اللَّهُ وَلَنْ يَنْطَفِئَ أَبَدًا
+`;
+
+            let artiPesan = `
+Untuk ${namaUser}...
+
+Jangan lupakan setiap kali kamu jatuh dan merasa tidak sanggup lagi,
+lalu kamu tetap memilih untuk bangkit meski perlahan. jangan lupakan
+semua beban yangnpernah kamu pikul sendirian, dan bagaimana jamu tetap
+bertahan sampai hari ini.
+
+Mungkin hari ini kamu tidak baik-baik saja, mungkin kamu sangat lelah
+dan tidak tahu harus bagaimana lagi, dab mungkin kamu merasa tidak ada
+yang benar-benar memahami dirimu.
+
+
+Tapi ingatlah....Allah tidak pernah meninggalkanmu, bahkan di saat kamu
+merasa paling jauh sekalipun.
+
+Kamu sedang berada dalam proses yang membentuk dan menguatkanmu menjadi
+lebih kuat dari sebelumnya. Jadi jangan berhenti sekarang, meskipun lankahmu
+pelan.
+
+
+Teryslah belajar dengan tenang, karena didalam dirimu ada cahaya yanga Allah
+jaga, dan cahay itu tidak akan pernah padam.
+`;
+
+            ketik(pesan, arab, 0, () => {
+                setTimeout(() => {
+                    arti.innerText = artiPesan;
+                }, 800);
+            });
+        }
+
+        // NEXT
+        function nextSlide() {
+            if (typing) return;
+
+            index++;
+
+            if (index < data.length) {
+                tampil();
+            } else {
+                tampilEnding();
+            }
+        }
+    </script>
+
+</body>
+
+</html>
